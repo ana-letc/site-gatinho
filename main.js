@@ -7,8 +7,8 @@ meuBody.style.alignItems = "center";
 meuBody.style.height = "100vh";
 meuBody.style.backgroundColor = "#EFD3D7";
   
-let meuTitulo = document.getElementById("meuTitulo");
-// meuTitulo.style.display('grid');
+let meuTitulo = document.getElementById("totalcliques");
+meuTitulo.style.display="grid";
 
 
 
@@ -55,6 +55,7 @@ for (let i = 0; i < 10; i++) {
  
 
   let quantcliques = document.createElement("p");
+  quantcliques.className ="quantcliquestotais";
 
   quantcliques.textContent = "Doações: 0 ";
 
@@ -88,7 +89,7 @@ for (let i = 0; i < 10; i++) {
 
   let meuBotao2 = document.createElement("button");
 
-  meuBotao2.className = "meuBotao";
+  meuBotao2.className = "meuBotao2";
 
   meuBotao2.textContent = "Quero ignorar";
 
@@ -111,17 +112,31 @@ for (let i = 0; i < 10; i++) {
  
 
   meuBotao.addEventListener("click", function () {
-
     count++;
-
-    quantcliques.textContent = "Doações: " + count;
-
+    quantcliques.textContent = count;
   });
 
- 
+  let botoes = document.querySelectorAll('.meuBotao');    
+  let total = 0;
+    botoes.forEach(meuBotao =>{
+    meuBotao.addEventListener('click', () => {
+        total++;    
+        meuTitulo.textContent = total;
+    });
+  });
 
+//   let botoes2 = document.querySelectorAll('.meuBotao2');    
+//     botoes2.forEach(meuBotao2 =>{
+//     meuBotao2.addEventListener('click', () => {
+//         total--;    
+//         meuTitulo.textContent = "Total: " + total--;
+//     });
+//   });
+  
   meuBotao2.addEventListener("click", function () {
 
+    let countcat = meuContainer.querySelector(".quantcliquestotais").innerHTML;
+    meuTitulo.textContent = parseInt(meuTitulo.textContent) - parseInt(countcat);
     meuContainer.remove();
 
   });
