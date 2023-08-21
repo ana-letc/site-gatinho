@@ -19,12 +19,12 @@ function getRandomInt(min, max) {
 
 const caract = ["lindo", "charmoso", "fofo", "brincalhão"];
 const gatos = [];
-for (let i=0; i<10; i++){
+for (let i=0; i<15; i++){
   gatos[i] = caract[getRandomInt(0, 4)];
 }
 
 let total = 0;
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 5; i++) {
   let count = 0;
   let meuContainer = document.createElement("div");
   meuContainer.classList.add("container");
