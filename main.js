@@ -6,7 +6,7 @@ meuBody.style.gridTemplateColumns = "1fr 1fr 1fr";
 meuBody.style.alignItems = "center";
 meuBody.style.backgroundColor = "#EFD3D7";
 
-const addCat = () => {
+const addCat = (name) => {
   let count = 0;
   let meuContainer = document.createElement("div");
   meuContainer.classList.add("container");
@@ -22,7 +22,7 @@ const addCat = () => {
   meuContainer.style.margin = "10px";
 
   let minhaImg = document.createElement("img");
-  minhaImg.src = `https://loremflickr.com/320/240/cat/?random=${gatos.length}`;
+  minhaImg.src = `https://loremflickr.com/320/240/cat?random=${getRandomInt(0, 2000)}`;
   minhaImg.style.width = "150px";
   minhaImg.style.height = "150px";
   minhaImg.style.borderRadius = "50%";
@@ -32,6 +32,11 @@ const addCat = () => {
   let quantcliques = document.createElement("h4");
   quantcliques.textContent = "0";
   meuContainer.appendChild(quantcliques);
+
+  let resultadoGato = document.createElement("h3");
+  resultadoGato.id = "resultadoGato";
+  resultadoGato.textContent = name;
+  meuContainer.appendChild(resultadoGato);
 
   let gatoescolhido = document.createElement("p");
   gatoescolhido.textContent = gatos[gatos.length - 1];
@@ -83,13 +88,25 @@ const addCat = () => {
   });
 
   meuBody.appendChild(meuContainer);
-  gatos.push(caract[getRandomInt(0, 10)]);
+  console.log(meuBody);
 };
 
 let meuTitulo = document.getElementById("totalcliques");
+// adicionarGato.addEventListener("click", addCat);
+adicionarGato.addEventListener("click", function (e) {
+  e.preventDefault();
+  let resultadoGato = document.getElementById("resultadoGato");
+  let inputNome = document.getElementById("input-nome");
+  const novoInput = inputNome.value;
+  // resultadoGato.textContent = novoInput;
+  addCat(novoInput);
+});
 
-let adicionarGato = document.getElementById("adicionarGato");
-adicionarGato.addEventListener("click", addCat);
+//para adicionar a característica
+/*function cliqueiEmAdc(){
+  const adicionar = document.querySelector(".adicionar-caract").value
+
+}*/
 
 // Função para gerar números inteiros aleatórios
 function getRandomInt(min, max) {
