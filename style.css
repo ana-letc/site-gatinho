@@ -5,6 +5,7 @@
     width: 250px;
     height: 150px;
     padding: 15px;
+    margin: 20px;
     border-radius: 20px;
     justify-content: center;
     align-items: center;
@@ -18,10 +19,10 @@
     background-color:#AF4680;
     color: #fff;
 }
-input{
+#input-nome{
     border:none;
     border-radius: 5px;
-    width: 150px;
+    width: 200px;
     height: 30px;
     padding:5px;
 }
@@ -31,4 +32,32 @@ font-size: 20px;
 color:#343434;
 margin: 10px;
 align-items: center;
+}
+
+.search-only{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border-width: 0;
+    white-space: nowrap;
+}
+
+#filter{
+    border:none;
+    border-radius: 5px;
+    width: 150px;
+    height: 30px;
+    padding:5px;
+}
+
+.input-search{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
 }

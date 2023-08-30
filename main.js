@@ -6,9 +6,27 @@ meuBody.style.gridTemplateColumns = "1fr 1fr 1fr";
 meuBody.style.alignItems = "center";
 meuBody.style.backgroundColor = "#EFD3D7";
 
+
+
 const addCat = (name) => {
   let count = 0;
-  let meuContainer = document.createElement("div");
+  let minhaLista = document.createElement("li");
+  minhaLista.className = "lista";
+  minhaLista.classList.add("container");
+  minhaLista.style.background = "rgba( 255, 255, 255, 0.30 )";
+  minhaLista.style.backdropFilter = "blur(16px)";
+  minhaLista.style.width = "20vw";
+  minhaLista.style.display = "flex";
+  minhaLista.style.flexDirection = "column";
+  minhaLista.style.justifyContent = "center";
+  minhaLista.style.alignItems = "center";
+  minhaLista.style.gap = "2px";
+  minhaLista.style.padding = "15px";
+  minhaLista.style.margin = "10px";
+  minhaLista.style.borderRadius = "10px";
+
+
+  /*let meuContainer = document.createElement("div");
   meuContainer.classList.add("container");
   meuContainer.style.background = "rgba( 255, 255, 255, 0.30 )";
   meuContainer.style.backdropFilter = "blur(16px)";
@@ -19,7 +37,7 @@ const addCat = (name) => {
   meuContainer.style.alignItems = "center";
   meuContainer.style.gap = "2px";
   meuContainer.style.padding = "15px";
-  meuContainer.style.margin = "10px";
+  meuContainer.style.margin = "10px";*/
 
   let minhaImg = document.createElement("img");
   minhaImg.src = `https://loremflickr.com/320/240/cat?random=${getRandomInt(0, 2000)}`;
@@ -27,20 +45,20 @@ const addCat = (name) => {
   minhaImg.style.height = "150px";
   minhaImg.style.borderRadius = "50%";
   minhaImg.style.gap = "10px";
-  meuContainer.appendChild(minhaImg);
+  minhaLista.appendChild(minhaImg);
 
   let quantcliques = document.createElement("h4");
   quantcliques.textContent = "0";
-  meuContainer.appendChild(quantcliques);
+  minhaLista.appendChild(quantcliques);
 
   let resultadoGato = document.createElement("h3");
   resultadoGato.id = "resultadoGato";
   resultadoGato.textContent = name;
-  meuContainer.appendChild(resultadoGato);
+  minhaLista.appendChild(resultadoGato);
 
   let gatoescolhido = document.createElement("p");
   gatoescolhido.textContent = gatos[gatos.length - 1];
-  meuContainer.appendChild(gatoescolhido);
+  minhaLista.appendChild(gatoescolhido);
 
   let meuBotao = document.createElement("button");
   meuBotao.className = "meuBotao";
@@ -54,7 +72,7 @@ const addCat = (name) => {
   meuBotao.style.width = "100px";
   meuBotao.style.height = "40px";
 
-  meuContainer.appendChild(meuBotao);
+  minhaLista.appendChild(meuBotao);
 
   let meuBotao2 = document.createElement("button");
   meuBotao2.className = "meuBotao2";
@@ -67,28 +85,29 @@ const addCat = (name) => {
   meuBotao2.style.border = "none";
   meuBotao2.style.width = "100px";
   meuBotao2.style.height = "40px";
-  meuContainer.appendChild(meuBotao2);
+  minhaLista.appendChild(meuBotao2);
 
   meuBotao.addEventListener("click", function () {
     count++;
     quantcliques.textContent = count;
   });
 
+
   meuBotao.addEventListener("click", () => {
     total++;
     meuTitulo.textContent = total;
   });
+  
 
   meuBotao2.addEventListener("click", function () {
     let countcat = quantcliques.textContent;
     meuTitulo.textContent =
       parseInt(meuTitulo.textContent) - parseInt(countcat);
     total = meuTitulo.textContent;
-    meuContainer.remove();
+    minhaLista.remove();
   });
 
-  meuBody.appendChild(meuContainer);
-  console.log(meuBody);
+  meuBody.appendChild(minhaLista);
 };
 
 let meuTitulo = document.getElementById("totalcliques");
@@ -130,7 +149,27 @@ for (let i = 0; i < 10; i++) {
   gatos[i] = caract[getRandomInt(0, 10)];
 }
 
-let total = 0;
-for (let i = 0; i < 10; i++) {
-  addCat();
+let total =0;
+
+
+
+
+/*const filterElement = document.getElementById("filter");
+
+const listas = document.querySelectorAll("lista");
+filterElement.addEventListener('input', filterListas)
+
+
+
+function filterListas(){
+if(filterElement.textContent !== ''){
+for (let lista of listas){
+
+  let title = card.getElementById("h3");
+  title = title.textContent.tolowerCase();
+  console.log("title");
+}else{
+
+  }
 }
+}*/
