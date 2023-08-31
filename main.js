@@ -154,22 +154,30 @@ let total =0;
 
 
 
-/*const filterElement = document.getElementById("filter");
+const filterElement = document.getElementById("filter-name");
 
-const listas = document.querySelectorAll("lista");
+const listas = document.querySelectorAll(".lista h3");
 filterElement.addEventListener('input', filterListas)
 
 
 
 function filterListas(){
-if(filterElement.textContent !== ''){
-for (let lista of listas){
+  if(filterElement.value !== ''){
+    for (let lista of listas){
 
-  let title = card.getElementById("h3");
-  title = title.textContent.tolowerCase();
-  console.log("title");
-}else{
-
+      let title = title.getElementById("resultadoGato");
+      title = title.textContent.tolowerCase();
+      let filterText = filterElement.value.tolowerCase();
+      if(!title.includes(filterText)){
+      lista.style.display="none";
+      }
+      else{
+      lista.style.display="block";
+      }
+  }
+} else {
+  for (let lista of listas){
+    lista.style.display="block";
+   }
   }
 }
-}*/
