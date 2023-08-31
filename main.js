@@ -6,10 +6,36 @@ meuBody.style.gridTemplateColumns = "1fr 1fr 1fr";
 meuBody.style.alignItems = "center";
 meuBody.style.backgroundColor = "#EFD3D7";
 
+// const Cat = (name, image, qtd) => {
+//   return { name: name, image: image, qtd: qtd };
+// };
 
+class Cat {
+  constructor(id, name, image, qtd) {
+    this.id = id;
+    this.name = name;
+    this.image = image;
+    this.qtd = qtd;
+  }
+}
+
+let gatos = [];
 
 const addCat = (name) => {
+  let image = `https://loremflickr.com/320/240/cat?random=${getRandomInt(
+    0,
+    2000
+  )}`;
+  console.log(name);
+  gatos.push(new Cat(gatos.length, name, image, 0));
+};
+
+const renderCat = (cat) => {
   let count = 0;
+
+  let meuUl = document.createElement("ul");
+  meuUl.className = "meuUl";
+
   let minhaLista = document.createElement("li");
   minhaLista.className = "lista";
   minhaLista.classList.add("container");
@@ -25,22 +51,8 @@ const addCat = (name) => {
   minhaLista.style.margin = "10px";
   minhaLista.style.borderRadius = "10px";
 
-
-  /*let meuContainer = document.createElement("div");
-  meuContainer.classList.add("container");
-  meuContainer.style.background = "rgba( 255, 255, 255, 0.30 )";
-  meuContainer.style.backdropFilter = "blur(16px)";
-  meuContainer.style.width = "20vw";
-  meuContainer.style.display = "flex";
-  meuContainer.style.flexDirection = "column";
-  meuContainer.style.justifyContent = "center";
-  meuContainer.style.alignItems = "center";
-  meuContainer.style.gap = "2px";
-  meuContainer.style.padding = "15px";
-  meuContainer.style.margin = "10px";*/
-
   let minhaImg = document.createElement("img");
-  minhaImg.src = `https://loremflickr.com/320/240/cat?random=${getRandomInt(0, 2000)}`;
+  minhaImg.src = cat.image;
   minhaImg.style.width = "150px";
   minhaImg.style.height = "150px";
   minhaImg.style.borderRadius = "50%";
@@ -48,12 +60,14 @@ const addCat = (name) => {
   minhaLista.appendChild(minhaImg);
 
   let quantcliques = document.createElement("h4");
-  quantcliques.textContent = "0";
+  quantcliques.textContent = cat.qtd;
   minhaLista.appendChild(quantcliques);
 
   let resultadoGato = document.createElement("h3");
   resultadoGato.id = "resultadoGato";
-  resultadoGato.textContent = name;
+  resultadoGato.textContent = cat.name;
+  console.log(resultadoGato.textContent);
+
   minhaLista.appendChild(resultadoGato);
 
   let gatoescolhido = document.createElement("p");
@@ -62,6 +76,7 @@ const addCat = (name) => {
 
   let meuBotao = document.createElement("button");
   meuBotao.className = "meuBotao";
+  meuBotao.dataset.dataid = cat.id;
   meuBotao.textContent = "Doe aqui!";
   meuBotao.style.backgroundColor = "black";
   meuBotao.style.color = "white";
@@ -71,7 +86,6 @@ const addCat = (name) => {
   meuBotao.style.border = "none";
   meuBotao.style.width = "100px";
   meuBotao.style.height = "40px";
-
   minhaLista.appendChild(meuBotao);
 
   let meuBotao2 = document.createElement("button");
@@ -87,27 +101,37 @@ const addCat = (name) => {
   meuBotao2.style.height = "40px";
   minhaLista.appendChild(meuBotao2);
 
-  meuBotao.addEventListener("click", function () {
-    count++;
-    quantcliques.textContent = count;
+  meuBotao.addEventListener("click", function (e) {
+    gatos[e.target.dataset.dataid].qtd++;
+
+    let qtdTotal = 0;
+    gatos.forEach((element) => {
+      qtdTotal += element.qtd;
+    });
+
+    document.getElementById("totalcliques").innerHTML = qtdTotal;
+    renderListCats(gatos);
   });
 
-
-  meuBotao.addEventListener("click", () => {
-    total++;
-    meuTitulo.textContent = total;
-  });
-  
+  meuBotao.addEventListener("click", () => {});
 
   meuBotao2.addEventListener("click", function () {
-    let countcat = quantcliques.textContent;
-    meuTitulo.textContent =
-      parseInt(meuTitulo.textContent) - parseInt(countcat);
-    total = meuTitulo.textContent;
-    minhaLista.remove();
+    gatos = gatos.filter((g) => g.id != cat.id);
+    renderListCats(gatos);
+    document.getElementById("totalcliques").innerHTML = gatos.reduce(
+      (prev, curr) => (prev.qtd || 0) + (curr.qtd || 0)
+    );
   });
+  meuUl.appendChild(minhaLista);
+  meuBody.appendChild(meuUl);
+};
 
-  meuBody.appendChild(minhaLista);
+const renderListCats = (gatos) => {
+  let uls = document.querySelectorAll(".meuUl");
+  uls.forEach((ul) => ul.remove());
+  gatos.forEach((gato) => {
+    renderCat(gato);
+  });
 };
 
 let meuTitulo = document.getElementById("totalcliques");
@@ -119,6 +143,7 @@ adicionarGato.addEventListener("click", function (e) {
   const novoInput = inputNome.value;
   // resultadoGato.textContent = novoInput;
   addCat(novoInput);
+  renderListCats(gatos);
 });
 
 //para adicionar a característica
@@ -132,52 +157,29 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const caract = [
-  "lindo",
-  "charmoso",
-  "fofo",
-  "brincalhão",
-  "carinhoso",
-  "tímido",
-  "Mega fofo",
-  "Querendo um humano",
-  "muito fofinho também",
-  "Mais fofo ainda",
-];
-const gatos = [];
-for (let i = 0; i < 10; i++) {
-  gatos[i] = caract[getRandomInt(0, 10)];
-}
+// const caract = [
+//   "lindo",
+//   "charmoso",
+//   "fofo",
+//   "brincalhão",
+//   "carinhoso",
+//   "tímido",
+//   "Mega fofo",
+//   "Querendo um humano",
+//   "muito fofinho também",
+//   "Mais fofo ainda",
+// ];
 
-let total =0;
+// for (let i = 0; i < 10; i++) {
+//   gatos[i] = caract[getRandomInt(0, 10)];
+// }
 
-
-
+// let total = 0;
 
 const filterElement = document.getElementById("filter-name");
+filterElement.addEventListener("input", filterListas);
 
-const listas = document.querySelectorAll(".lista h3");
-filterElement.addEventListener('input', filterListas)
-
-
-
-function filterListas(){
-  if(filterElement.value !== ''){
-    for (let lista of listas){
-
-      let title = title.getElementById("resultadoGato");
-      title = title.textContent.tolowerCase();
-      let filterText = filterElement.value.tolowerCase();
-      if(!title.includes(filterText)){
-      lista.style.display="none";
-      }
-      else{
-      lista.style.display="block";
-      }
-  }
-} else {
-  for (let lista of listas){
-    lista.style.display="block";
-   }
-  }
+function filterListas(e) {
+  let gatosFiltrados = gatos.filter((g) => g.name.includes(e.target.value));
+  renderListCats(gatosFiltrados);
 }
