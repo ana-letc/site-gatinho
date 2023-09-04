@@ -2,10 +2,10 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-// a função cat cria um gato com esses parâmetros/ cada cat tem um estado/cada cat tem a ação de incremento no contador/ eu entendi que o render mostra o Cat
+// a função cat com 5 parâmetros cria um objeto que representa um gato
 const Cat = (parent, id, name, image, qtd) => {
-  const state = {
-    id: id,
+  const state = { // cria um objeto state e armazena informações sobre o gato. Cada uma dessas propriedades é inicializada com o valor correspondente passado como argumento para a função. Quando chamo a função Cat com os argumentos apropriados, ela cria um objeto com as informações do gato e o armazena no objeto state. O objeto state representa o estado do gato e pode ser usado posteriormente para realizar ações e renderizar o gato.
+    id: id, // define a propriedade 'id' do objeto state e a inicializa com o valor da variável 'id' que foi passada como argumento para a função. Basicamente, está atribuindo o valor da variável 'id' à propriedade "id" do objeto.
     name: name,
     image: image,
     qtd: qtd,
