@@ -10,11 +10,11 @@ const Cat = (parent, id, name, image, qtd) => {
     image: image,
     qtd: qtd,
   };
-
+// actions é um objeto e define uma função chamanda increment. A função não tem argumentos, mas é executada quando é chamada actions.increment()
   const actions = {
-    increment() {
+    increment() { 
       state.qtd = state.qtd + 1;
-      parent.actions.notify();
+      parent.actions.notify(); // aqui a função notify é chamada. A mesma está definida no objeto actions, que é um objeto de parent.
     },
   };
 
@@ -99,6 +99,7 @@ const Cat = (parent, id, name, image, qtd) => {
     meuBody.appendChild(meuUl);
   }
 
+  // este objeto tem três propriedades. Return é utilizado para sair da função e para trazer um valor de retorno. Esses elementos estão relacionados a um objeto maior e devolvendo esse objeto como resultado de uma função.
   return {
     state: state,
     actions: actions,
@@ -112,10 +113,10 @@ const CatList = () => {
     catList: [],
     filteredCats: [],
   };
-
+// actions possui como propriedades: notify e render; Notify não recebe argumnetos, mas será executada quando for chamada actions.notify()
   const actions = {
     notify() {
-      render();
+      render(); // render será executada quando for chamada notify() 
     },
     filter(filtered) {
       state.filteredCats = filtered;
