@@ -14,7 +14,7 @@ const Cat = (parent, id, name, image, qtd) => {
   const actions = {
     increment() { 
       state.qtd = state.qtd + 1;
-      parent.actions.notify(); // aqui a função notify é chamada. A mesma está definida no objeto actions, que é um objeto de parent.
+      parent.render(); // aqui a função notify é chamada. A mesma está definida no objeto actions, que é um objeto de parent.
     },
   };
 
@@ -45,6 +45,7 @@ const Cat = (parent, id, name, image, qtd) => {
     minhaImg.style.gap = "10px";
     minhaLista.appendChild(minhaImg);
 
+    // o texto que será exibido dentro do h4 será igual ao valor de state.qtd
     let quantcliques = document.createElement("h4");
     quantcliques.textContent = state.qtd;
     minhaLista.appendChild(quantcliques);
@@ -91,6 +92,7 @@ const Cat = (parent, id, name, image, qtd) => {
       actions.increment();
     });
 
+    // dentro da função anônoma, chama-se a função removeCat() encontrada no objeto actions do objeto parent. A função removeCat toma um argumento state.id e é usada para remover um gato de uma lista, o mesmo está identificado por state.id
     meuBotao2.addEventListener("click", function () {
       parent.actions.removeCat(state.id);
     });
@@ -100,6 +102,7 @@ const Cat = (parent, id, name, image, qtd) => {
   }
 
   // este objeto tem três propriedades. Return é utilizado para sair da função e para trazer um valor de retorno. Esses elementos estão relacionados a um objeto maior e devolvendo esse objeto como resultado de uma função.
+  // a declaração return é utilizada para sair da função e fornecer um valor de retorno
   return {
     state: state,
     actions: actions,
@@ -118,6 +121,9 @@ const CatList = () => {
     notify() {
       render(); // render será executada quando for chamada notify() 
     },
+    // definição de um método chamado filter. O método usa um parâmetro 'filtered', para aplicar um filtro a uma lista de gatos.
+    //o valor do parâmetro é atribuído à propriedade filteredCats do objeto state. Isso implica que o método filter é utilizado para atualizar o estadi do aplicativo com uma lista de gatos filtrada. a propriedade filteredCats será utilizada para armazenar a lista de gatos após aplicar um filtro específico.
+    //depois de atualizar o estado com o filtro 
     filter(filtered) {
       state.filteredCats = filtered;
       render();
@@ -127,11 +133,13 @@ const CatList = () => {
         0,
         2000
       )}`;
-
+// aqui um novo gato foi adicionado à lista de gatos representados por state.catList. é utilizado o método push() para adicionar um elemento ao final da matriz 
       state.catList.push(
         Cat({ state, actions }, state.catList.length, name, image, 0)
       );
+      //agora ele atualiza a propriedade filteredCats do objeto state
       state.filteredCats = state.catList;
+      //após adicionar um novo gato, a lista filtrada será atualizada para incluir todos os gatos, sem aplicar nenhum filtro
       render();
     },
     removeCat(id) {
@@ -140,7 +148,7 @@ const CatList = () => {
       render();
     },
   };
-
+//parei aqui
   const filter = CatFilter({ state, actions });
   filter.render();
 
