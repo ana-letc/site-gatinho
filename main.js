@@ -3,22 +3,29 @@ function getRandomInt(min, max) {
 }
 
 // a função cat com 5 parâmetros cria um objeto que representa um gato
-const Cat = (parent, id, name, image, qtd) => {
-  const state = { // cria um objeto state e armazena informações sobre o gato. Cada uma dessas propriedades é inicializada com o valor correspondente passado como argumento para a função. Quando chamo a função Cat com os argumentos apropriados, ela cria um objeto com as informações do gato e o armazena no objeto state. O objeto state representa o estado do gato e pode ser usado posteriormente para realizar ações e renderizar o gato.
-    id: id, // define a propriedade 'id' do objeto state e a inicializa com o valor da variável 'id' que foi passada como argumento para a função. Basicamente, está atribuindo o valor da variável 'id' à propriedade "id" do objeto.
-    name: name,
-    image: image,
-    qtd: qtd,
-  };
-// actions é um objeto e define uma função chamanda increment. A função não tem argumentos, mas é executada quando é chamada actions.increment()
-  const actions = {
-    increment() { 
-      state.qtd = state.qtd + 1;
-      parent.render(); // aqui a função notify é chamada. A mesma está definida no objeto actions, que é um objeto de parent.
-    },
-  };
+class Cat {
+  constructor(id, name, image, qtd, onUpdate, onDelete) {
+    // cria um objeto state e armazena informações sobre o gato. Cada uma dessas propriedades é inicializada com o valor correspondente passado como argumento para a função. Quando chamo a função Cat com os argumentos apropriados, ela cria um objeto com as informações do gato e o armazena no objeto state. O objeto state representa o estado do gato e pode ser usado posteriormente para realizar ações e renderizar o gato.
+    this.id = id; // define a propriedade 'id' do objeto state e a inicializa com o valor da variável 'id' que foi passada como argumento para a função. Basicamente, está atribuindo o valor da variável 'id' à propriedade "id" do objeto.
+    this.name = name;
+    this.image = image;
+    this.qtd = qtd;
+    this.catList = catList;
+    this.onUpdate = onUpdate;
+    this.onDelete = onDelete;
+    // actions é um objeto e define uma função chamanda increment. A função não tem argumentos, mas é executada quando é chamada actions.increment()
+  }
 
-  function render() {
+  increment() {
+    this.qtd = this.qtd + 1;
+    this.onUpdate(this); // aqui a função notify é chamada. A mesma está definida no objeto actions, que é um objeto de parent.
+  }
+
+  remove() {
+    onDelete(this);
+  }
+
+  render() {
     let meuUl = document.createElement("ul");
     meuUl.className = "meuUl";
 
@@ -88,42 +95,37 @@ const Cat = (parent, id, name, image, qtd) => {
     meuBotao2.style.height = "40px";
     minhaLista.appendChild(meuBotao2);
 
-    meuBotao.addEventListener("click", function (e) {
-      actions.increment();
-    });
-
+    
     // dentro da função anônoma, chama-se a função removeCat() encontrada no objeto actions do objeto parent. A função removeCat toma um argumento state.id e é usada para remover um gato de uma lista, o mesmo está identificado por state.id
-    meuBotao2.addEventListener("click", function () {
-      parent.actions.removeCat(state.id);
-    });
+    meuBotao.addEventListener("click", this.increment);
+    meuBotao2.addEventListener("click", this.remove);
 
     meuUl.appendChild(minhaLista);
     meuBody.appendChild(meuUl);
   }
+}
 
-  // este objeto tem três propriedades. Return é utilizado para sair da função e para trazer um valor de retorno. Esses elementos estão relacionados a um objeto maior e devolvendo esse objeto como resultado de uma função.
-  // a declaração return é utilizada para sair da função e fornecer um valor de retorno
-  return {
-    state: state,
-    actions: actions,
-    render: render,
-  };
-};
+class Catlist{
+  constructor(state, actions){
+    this.state = state;
+    this.actions = actions;
+  }
 
+  
 //Cada novo Cat vai ser adicionado na CatList/ Catlist possui dois atributos no estado, uma lista para receber os gatos e filteredcats para receber gatos filtrados
 const CatList = () => {
   const state = {
     catList: [],
     filteredCats: [],
   };
-// actions possui como propriedades: notify e render; Notify não recebe argumnetos, mas será executada quando for chamada actions.notify()
+  // actions possui como propriedades: notify e render; Notify não recebe argumnetos, mas será executada quando for chamada actions.notify()
   const actions = {
     notify() {
-      render(); // render será executada quando for chamada notify() 
+      render(); // render será executada quando for chamada notify()
     },
     // definição de um método chamado filter. O método usa um parâmetro 'filtered', para aplicar um filtro a uma lista de gatos.
     //o valor do parâmetro é atribuído à propriedade filteredCats do objeto state. Isso implica que o método filter é utilizado para atualizar o estadi do aplicativo com uma lista de gatos filtrada. a propriedade filteredCats será utilizada para armazenar a lista de gatos após aplicar um filtro específico.
-    //depois de atualizar o estado com o filtro 
+    //depois de atualizar o estado com o filtro
     filter(filtered) {
       state.filteredCats = filtered;
       render();
@@ -133,22 +135,30 @@ const CatList = () => {
         0,
         2000
       )}`;
-// aqui um novo gato foi adicionado à lista de gatos representados por state.catList. é utilizado o método push() para adicionar um elemento ao final da matriz 
+      // aqui um novo gato foi adicionado à lista de gatos representados por state.catList. é utilizado o método push() para adicionar um elemento ao final da matriz
       state.catList.push(
-        Cat({ state, actions }, state.catList.length, name, image, 0)
+        new Cat(
+          state.catList.length,
+          name,
+          image,
+          0,
+          this.notify,
+          this.removeCat
+        )
       );
       //agora ele atualiza a propriedade filteredCats do objeto state
       state.filteredCats = state.catList;
       //após adicionar um novo gato, a lista filtrada será atualizada para incluir todos os gatos, sem aplicar nenhum filtro
       render();
     },
-    removeCat(id) {
-      state.catList = state.catList.filter((cat) => cat.state.id != id);
+
+    removeCat(cat) {
+      state.catList = state.catList.filter((cat) => cat.state.id != cat.id);
       state.filteredCats = state.catList;
       render();
     },
   };
-// filter está chamando a função CatFilter e passando um objeto como argumento, contendo duas propriedades state e actions
+  // filter está chamando a função CatFilter e passando um objeto como argumento, contendo duas propriedades state e actions
   const filter = CatFilter({ state, actions });
   filter.render();
 
@@ -173,7 +183,7 @@ const CatList = () => {
     render: render,
   };
 };
-
+}
 const CatFilter = (parent) => {
   const state = {
     text: "",
