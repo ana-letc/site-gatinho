@@ -148,13 +148,13 @@ const CatList = () => {
       render();
     },
   };
-//parei aqui
+// filter está chamando a função CatFilter e passando um objeto como argumento, contendo duas propriedades state e actions
   const filter = CatFilter({ state, actions });
   filter.render();
 
   function render() {
     let uls = document.querySelectorAll(".meuUl");
-    uls.forEach((ul) => ul.remove());
+    uls.forEach((ul) => ul.remove()); // para cada elemento ul encontrada, chama-se o método remove() nesse elemento.Isso elimina todos os elementos ul da classe meulUl do doc DOM
     state.filteredCats.forEach((gato) => {
       gato.render();
     });
