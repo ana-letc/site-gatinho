@@ -111,7 +111,6 @@ class Catlist{
     this.actions = actions;
   }
 
-  
 //Cada novo Cat vai ser adicionado na CatList/ Catlist possui dois atributos no estado, uma lista para receber os gatos e filteredcats para receber gatos filtrados
 const CatList = () => {
   const state = {
