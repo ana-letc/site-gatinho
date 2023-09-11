@@ -1,28 +1,34 @@
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
-// a função cat com 5 parâmetros cria um objeto que representa um gato
-class Cat {
-  constructor(id, name, image, qtd, onUpdate, onDelete) {
-    // cria um objeto state e armazena informações sobre o gato. Cada uma dessas propriedades é inicializada com o valor correspondente passado como argumento para a função. Quando chamo a função Cat com os argumentos apropriados, ela cria um objeto com as informações do gato e o armazena no objeto state. O objeto state representa o estado do gato e pode ser usado posteriormente para realizar ações e renderizar o gato.
-    this.id = id; // define a propriedade 'id' do objeto state e a inicializa com o valor da variável 'id' que foi passada como argumento para a função. Basicamente, está atribuindo o valor da variável 'id' à propriedade "id" do objeto.
-    this.name = name;
-    this.image = image;
-    this.qtd = qtd;
-    this.catList = catList;
+class Tarefa {
+  constructor(id, descricao, onUpdate, onDelete) {
+    this.id = id;
+    this.descricao = descricao;
+    this.concluido = false;
+    this.favorito = false;
     this.onUpdate = onUpdate;
     this.onDelete = onDelete;
-    // actions é um objeto e define uma função chamanda increment. A função não tem argumentos, mas é executada quando é chamada actions.increment()
   }
 
-  increment() {
-    this.qtd = this.qtd + 1;
-    this.onUpdate(this); // aqui a função notify é chamada. A mesma está definida no objeto actions, que é um objeto de parent.
+  concluir() {
+    this.concluido = true;
+    this.onUpdate(this);
+  }
+  reverter() {
+    this.concluido = false;
+    this.onUpdate(this);
+  }
+
+  favoritar() {
+    this.favorito = true;
+    this.onUpdate(this);
+  }
+  
+  desfavoritar() {
+    this.favorito = false;
+    this.onUpdate(this);
   }
 
   remove() {
-    onDelete(this);
+    this.onDelete(this);
   }
 
   render() {
@@ -33,6 +39,12 @@ class Cat {
     minhaLista.className = "lista";
     minhaLista.classList.add("container");
     minhaLista.style.background = "rgba( 255, 255, 255, 0.30 )";
+    if (this.concluido) {
+      minhaLista.style.background = "rgba( 255, 255, 255, 0.10 )";
+    }
+    if (this.favorito) {
+      minhaLista.style.background = "rgba( 255, 20, 147, 0.30 )";
+    }
     minhaLista.style.backdropFilter = "blur(16px)";
     minhaLista.style.width = "20vw";
     minhaLista.style.display = "flex";
@@ -43,23 +55,10 @@ class Cat {
     minhaLista.style.padding = "15px";
     minhaLista.style.margin = "10px";
     minhaLista.style.borderRadius = "10px";
-
-    let minhaImg = document.createElement("img");
-    minhaImg.src = state.image;
-    minhaImg.style.width = "150px";
-    minhaImg.style.height = "150px";
-    minhaImg.style.borderRadius = "50%";
-    minhaImg.style.gap = "10px";
-    minhaLista.appendChild(minhaImg);
-
     // o texto que será exibido dentro do h4 será igual ao valor de state.qtd
-    let quantcliques = document.createElement("h4");
-    quantcliques.textContent = state.qtd;
-    minhaLista.appendChild(quantcliques);
-
     let resultadoGato = document.createElement("h3");
     resultadoGato.id = "resultadoGato";
-    resultadoGato.textContent = state.name;
+    resultadoGato.textContent = this.descricao;
     console.log(resultadoGato.textContent);
 
     minhaLista.appendChild(resultadoGato);
@@ -70,151 +69,145 @@ class Cat {
 
     let meuBotao = document.createElement("button");
     meuBotao.className = "meuBotao";
-    meuBotao.dataset.dataid = state.id;
-    meuBotao.textContent = "Doe aqui!";
+    meuBotao.dataset.dataid = this.id;
+    meuBotao.textContent = this.concluido ? "Reverter" : "Concluir!";
     meuBotao.style.backgroundColor = "black";
     meuBotao.style.color = "white";
     meuBotao.style.alignContent = "center";
     meuBotao.style.alignItems = "center";
     meuBotao.style.borderRadius = "5px";
     meuBotao.style.border = "none";
-    meuBotao.style.width = "100px";
-    meuBotao.style.height = "40px";
+    meuBotao.style.width = "80px";
+    meuBotao.style.height = "30px";
     minhaLista.appendChild(meuBotao);
 
     let meuBotao2 = document.createElement("button");
     meuBotao2.className = "meuBotao2";
-    meuBotao2.textContent = "Quero ignorar";
+    meuBotao2.textContent = "remover";
     meuBotao2.style.backgroundColor = "#AF4680";
     meuBotao2.style.color = "white";
     meuBotao2.style.alignContent = "center";
     meuBotao2.style.alignItems = "center";
     meuBotao2.style.borderRadius = "5px";
     meuBotao2.style.border = "none";
-    meuBotao2.style.width = "100px";
-    meuBotao2.style.height = "40px";
+    meuBotao2.style.width = "80px";
+    meuBotao2.style.height = "30px";
     minhaLista.appendChild(meuBotao2);
 
-    
-    // dentro da função anônoma, chama-se a função removeCat() encontrada no objeto actions do objeto parent. A função removeCat toma um argumento state.id e é usada para remover um gato de uma lista, o mesmo está identificado por state.id
-    meuBotao.addEventListener("click", this.increment);
-    meuBotao2.addEventListener("click", this.remove);
+    let meuBotaoFavorito = document.createElement("button");
+    meuBotaoFavorito.className = "meuBotaoFavorito";
+    meuBotaoFavorito.textContent = this.favorito ? "Desfavoritar" : "Favoritar";
+    meuBotaoFavorito.style.backgroundColor = "#ff1493";
+    meuBotaoFavorito.style.color = "white";
+    meuBotaoFavorito.style.alignContent = "center";
+    meuBotaoFavorito.style.alignItems = "center";
+    meuBotaoFavorito.style.borderRadius = "5px";
+    meuBotaoFavorito.style.border = "none";
+    meuBotaoFavorito.style.width = "80px";
+    meuBotaoFavorito.style.height = "30px";
+    minhaLista.appendChild(meuBotaoFavorito);
+
+    let self = this;
+    meuBotao.addEventListener("click", () => {
+      if (self.concluido) {
+        self.reverter();
+      } else {
+        self.concluir();
+      }
+    });
+    meuBotao2.addEventListener("click", () => {
+      self.remove();
+    });
+
+    meuBotaoFavorito.addEventListener("click", () => {
+      if (self.favorito) {
+        self.desfavoritar();
+      } else {
+        self.favoritar();
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function(){
+      const mostrarFavoritos = document.getElementById("mostrarFavoritos");
+
+      mostrarFavoritos.addEventListener("click", function(){
+        list.mostrarFavoritos();
+      });
+    });
 
     meuUl.appendChild(minhaLista);
     meuBody.appendChild(meuUl);
   }
 }
 
-class Catlist{
-  constructor(state, actions){
-    this.state = state;
-    this.actions = actions;
+class TarefaList {
+  constructor() {
+    this.tarefas = [];
+    this.filtered = [];
+    const filterElement = document.getElementById("filter-name");
+    let self = this;
+    filterElement.addEventListener("input", (e) => {
+      self.filtrar(e.target.value);
+    });
   }
 
-//Cada novo Cat vai ser adicionado na CatList/ Catlist possui dois atributos no estado, uma lista para receber os gatos e filteredcats para receber gatos filtrados
-const CatList = () => {
-  const state = {
-    catList: [],
-    filteredCats: [],
-  };
-  // actions possui como propriedades: notify e render; Notify não recebe argumnetos, mas será executada quando for chamada actions.notify()
-  const actions = {
-    notify() {
-      render(); // render será executada quando for chamada notify()
-    },
-    // definição de um método chamado filter. O método usa um parâmetro 'filtered', para aplicar um filtro a uma lista de gatos.
-    //o valor do parâmetro é atribuído à propriedade filteredCats do objeto state. Isso implica que o método filter é utilizado para atualizar o estadi do aplicativo com uma lista de gatos filtrada. a propriedade filteredCats será utilizada para armazenar a lista de gatos após aplicar um filtro específico.
-    //depois de atualizar o estado com o filtro
-    filter(filtered) {
-      state.filteredCats = filtered;
-      render();
-    },
-    addCat(name) {
-      let image = `https://loremflickr.com/320/240/cat?random=${getRandomInt(
-        0,
-        2000
-      )}`;
-      // aqui um novo gato foi adicionado à lista de gatos representados por state.catList. é utilizado o método push() para adicionar um elemento ao final da matriz
-      state.catList.push(
-        new Cat(
-          state.catList.length,
-          name,
-          image,
-          0,
-          this.notify,
-          this.removeCat
-        )
-      );
-      //agora ele atualiza a propriedade filteredCats do objeto state
-      state.filteredCats = state.catList;
-      //após adicionar um novo gato, a lista filtrada será atualizada para incluir todos os gatos, sem aplicar nenhum filtro
-      render();
-    },
+  notify(c) {
+    this.render(); // render será executada quando for chamada notify()
+  }
+  // definição de um método chamado filter. O método usa um parâmetro 'filtered', para aplicar um filtro a uma lista de gatos.
+  //o valor do parâmetro é atribuído à propriedade filtered do objeto state. Isso implica que o método filter é utilizado para atualizar o estadi do aplicativo com uma lista de gatos filtrada. a propriedade filtered será utilizada para armazenar a lista de gatos após aplicar um filtro específico.
+  //depois de atualizar o estado com o filtro
+  filtrar(text) {
+    this.filtered = this.tarefas.filter((g) => g.descricao.includes(text));
+    this.render();
+  }
+  add(name) {
+    let self = this;
 
-    removeCat(cat) {
-      state.catList = state.catList.filter((cat) => cat.state.id != cat.id);
-      state.filteredCats = state.catList;
-      render();
-    },
-  };
-  // filter está chamando a função CatFilter e passando um objeto como argumento, contendo duas propriedades state e actions
-  const filter = CatFilter({ state, actions });
-  filter.render();
+    // aqui um novo gato foi adicionado à lista de gatos representados por state.tarefas. é utilizado o método push() para adicionar um elemento ao final da matriz
+    this.tarefas.push(
+      new Tarefa(
+        this.tarefas.length,
+        name,
+        (cat) => {
+          self.notify();
+        },
+        (cat) => {
+          self.removeCat(cat.id);
+        }
+      )
+    );
+    //agora ele atualiza a propriedade filtered do objeto state
+    this.filtered = this.tarefas;
+    //após adicionar um novo gato, a lista filtrada será atualizada para incluir todos os gatos, sem aplicar nenhum filtro
+    this.render();
+  }
 
-  function render() {
+  removeCat(id) {
+    this.tarefas = this.tarefas.filter((cat) => cat.id != id);
+    this.filtered = this.tarefas;
+    this.render();
+  }
+
+  render() {
     let uls = document.querySelectorAll(".meuUl");
     uls.forEach((ul) => ul.remove()); // para cada elemento ul encontrada, chama-se o método remove() nesse elemento.Isso elimina todos os elementos ul da classe meulUl do doc DOM
-    state.filteredCats.forEach((gato) => {
+
+    this.filtered.forEach((gato) => {
       gato.render();
     });
-
-    let qtdTotal = 0;
-    state.filteredCats.forEach((element) => {
-      qtdTotal += element.state.qtd;
-    });
-
-    document.getElementById("totalcliques").innerHTML = qtdTotal;
   }
 
-  return {
-    state: state,
-    actions: actions,
-    render: render,
-  };
-};
+  mostrarFavoritos(){
+    this.filtered = 
+  }
 }
-const CatFilter = (parent) => {
-  const state = {
-    text: "",
-    filteredCats: [],
-  };
-
-  const actions = {
-    search(catList, text) {
-      state.filteredCats = catList.filter((g) => g.state.name.includes(text));
-      parent.actions.filter(state.filteredCats);
-    },
-  };
-
-  function render() {
-    const filterElement = document.getElementById("filter-name");
-    filterElement.addEventListener("input", (e) => {
-      actions.search(parent.state.catList, e.target.value);
-    });
-  }
-
-  return {
-    state: state,
-    actions: actions,
-    render: render,
-  };
-};
 
 const App = () => {
-  function render() {
-    const list = CatList();
-    list.render();
+  const list = new TarefaList();
+  list.render();
 
+  function render() {
     let meuBody = document.getElementById("meuBody");
     meuBody.style.margin = "20px";
     meuBody.style.padding = "0";
@@ -227,8 +220,8 @@ const App = () => {
     adicionarGato.addEventListener("click", function (e) {
       e.preventDefault();
       let inputNome = document.getElementById("input-nome");
-      const catName = inputNome.value;
-      list.actions.addCat(catName);
+      const descricao = inputNome.value;
+      list.add(descricao);
     });
   }
 
